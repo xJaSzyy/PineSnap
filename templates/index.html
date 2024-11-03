@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diplom</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .gallery div {
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+            background: white;
+        }
+        .gallery img {
+            max-width: 200px;
+            max-height: 200px;
+            display: block;
+        }
+        #uploadForm {
+            display: none; /* Initially hidden */
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload Images</h1>
+    <button id="showUploadForm">Upload New Images</button>
+    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="files[]" multiple>
+        <button type="submit">Upload</button>
+    </form>
+
+    <h1>Image Gallery</h1>
+    <div class="gallery">
+        {% for tree in trees %}
+            <div>
+                <h3>{{ tree.state }}</h3>
+                <img src="data:image/jpeg;base64,{{ tree.photo | b64encode }}" alt="Tree Image">
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.getElementById('showUploadForm').addEventListener('click', function() {
+            const uploadForm = document.getElementById('uploadForm');
+            uploadForm.style.display = uploadForm.style.display === 'none' ? 'block' : 'none';
+        });
+    </script>
+</body>
+</html>

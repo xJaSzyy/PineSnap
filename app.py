@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import base64
@@ -83,11 +83,40 @@ with app.app_context():
 #     except Exception as e:
 #         return f"An error occurred: {str(e)}", 500
 
-@app.route('/gallery')
-def gallery():
-    # Fetch all images from the database
-    trees = Tree.query.all()
-    return render_template('gallery.html', trees=trees)
+# @app.route('/gallery')
+# def gallery():
+#     # Fetch all images from the database
+#     trees = Tree.query.all()
+#     return render_template('gallery.html', trees=trees)
+
+@app.route('/')
+def index():
+    trees = Tree.query.all()  # Fetch all images from the database
+    return render_template('index.html', trees=trees)
+
+@app.route('/upload', methods=['POST'])
+def upload_files():
+    if 'files[]' not in request.files:
+        return "No file part", 400  # Return a 400 Bad Request response
+    
+    files = request.files.getlist('files[]')
+    
+    for file in files:
+        if file.filename == '':
+            return "No selected file", 400  # Return a 400 Bad Request response
+        
+        # Read the image file as binary
+        photo_data = file.read()
+        
+        # Create a new Tree instance with default state 'Health'
+        new_tree = Tree(photo=photo_data, state='Health')
+        
+        # Add and commit the new record to the database
+        db.session.add(new_tree)
+    
+    db.session.commit()  # Commit all at once after the loop
+    
+    return redirect(url_for('index'))  # Redirect to the index after successful upload
 
 @app.template_filter('b64encode')
 def b64encode(data):
