@@ -1,0 +1,152 @@
+body{
+  background-color: #F5F5F5;
+  margin: 0;
+  height: 100%;
+  
+}
+
+
+/* Хедер */
+
+header{
+  background: #FDFEFE;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  
+}
+
+img.Logo{
+    width: 167px;
+    height: 43px;
+    margin-left: 50px;
+    
+}
+
+.notification{
+  padding-right: 16px;
+}
+
+img.profile{
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  
+}
+
+menu{
+  float: right;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 50px;
+}
+
+/* Основная часть */
+
+main{
+  margin-left: 50px;
+  margin-right: 50px;
+  padding-bottom: 90px;
+  
+}
+
+button.btnDownload{
+  width: auto;
+  height: 56px;
+  background-color: #4db32e;
+  color: #FDFEFE;
+  border-radius: 18px;
+  border: none;
+  text-decoration: none;
+  font-size: 23px;
+  padding-left: 56px;
+  padding-right: 56px;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  float: right;
+ 
+}
+
+.btnDownload img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.gallery{
+  display: none;
+}
+
+
+
+/* Экран загрузки */
+.LoadingScreen {
+  position: fixed;
+  background-color: #FDFEFE;
+  border: none;
+  display: none;
+  /* width: 686px;
+  height: 433px; */
+
+  width: 300px;
+  height: 300px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  z-index: 9999;
+    
+
+
+    /* width:100%;
+    min-height:100%;
+    background-color: rgba(0,0,0,0.5);
+    overflow:hidden;
+    position:fixed;
+    top:0px; */
+    
+}
+
+
+
+
+
+
+  /* Делаем наше поле ввода файла невидимым */
+  .custom-file-input {
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+    z-index: -1; /* "Скрываем" поле ввода */
+  }
+  /* Создаем "подмену" кнопки */
+  .file-btn {
+    background: #f1f1f1;
+    border: 1px solid rgba(8, 8, 8, 0.2);
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+
+
+
+  /* Футер */
+
+  footer{
+    background: #FDFEFE;
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 80;
+  }
