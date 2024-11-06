@@ -2,6 +2,7 @@ import os
 import torch
 import base64
 import shutil
+import cv2
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
