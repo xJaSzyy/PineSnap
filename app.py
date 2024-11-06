@@ -22,6 +22,7 @@ class Tree(db.Model):
     photo = db.Column(db.LargeBinary, nullable=False)
     processed_photo = db.Column(db.LargeBinary, nullable=True)
     state = db.Column(db.Enum('Disease', 'Health'), nullable=False, default='Health')
+    is_processed = db.Column(db.Boolean, default=False)
 
 with app.app_context():
     db.create_all()
@@ -78,22 +79,27 @@ def run_yolo_predictions():
     predicted_folder = os.path.join(os.path.dirname(__file__), "runs", "predict")
     os.makedirs(predicted_folder, exist_ok=True)
 
-    trees = Tree.query.all()
+    trees = Tree.query.filter_by(is_processed=False).all()
+    
+    # Сохранение изображений в папку для предсказаний
     for tree in trees:
         image_path = os.path.join(predicted_folder, f"{tree.photo_name}.jpg")
         with open(image_path, 'wb') as img_file:
             img_file.write(tree.photo)
 
+    # Выполнение предсказаний
     results = model.predict(predicted_folder, save=True)
     predicted1_folder = os.path.join(os.path.dirname(__file__), "runs", "detect", "predict")
 
+    # Обработка результатов для каждого дерева
     for tree in trees:
         processed_image_path = os.path.join(predicted1_folder, f"{tree.photo_name}.jpg")
         
         if os.path.exists(processed_image_path):
             damage_detected = False
+            # Проверяем результаты для каждого дерева
             for result in results:
-                if result.path == image_path:
+                if result.path == os.path.join(predicted_folder, f"{tree.photo_name}.jpg"):  # Убедитесь, что путь совпадает
                     if result.boxes is not None and len(result.boxes) > 0:
                         for box in result.boxes:
                             class_id = int(box.cls)
@@ -101,8 +107,9 @@ def run_yolo_predictions():
                             if class_name == 'BadTree':
                                 damage_detected = True
                                 break
-                    break
+                    break  # Прерываем цикл, если нашли нужное дерево
 
+            # Обновляем состояние дерева
             if damage_detected:
                 tree.state = 'Disease'
                 with open(processed_image_path, 'rb') as processed_img_file:
@@ -110,8 +117,10 @@ def run_yolo_predictions():
             else:
                 tree.state = 'Health'
 
-            db.session.commit()
+            tree.is_processed = True
+            db.session.commit()  # Сохраняем изменения для каждого дерева отдельно
     
+    # Очищаем временные папки
     clear_folder(predicted_folder)
     if os.path.exists(predicted1_folder):
         shutil.rmtree(predicted1_folder)
