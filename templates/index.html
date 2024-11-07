@@ -25,15 +25,10 @@
             <button onclick="closeLoadingScreen()">
                 <img src="{{ url_for('static', filename='img/close-x.svg') }}" alt="">
             </button>
-            
-            <!-- <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
-                <input type="file" name="files[]" multiple>
-                <button type="submit">Загрузить</button>
-            </form> -->
 
             <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
                 <label class="file-btn" for="showUploadForm">Выбрать файлы</label>
-                <input id="showUploadForm" name="files" multiple class="custom-file-input" type="file" onchange="updateFileLabel(this.files)">
+                <input id="showUploadForm" name="files" multiple class="custom-file-input" type="file" accept=".mp4, .mov, .avi, .jpg, .jpeg, .png" onchange="updateFileLabel(this.files)">
                 <span id="file-label"></span>
                 <button type="submit">Загрузить</button>
             </form>

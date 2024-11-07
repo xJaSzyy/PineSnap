@@ -3,6 +3,7 @@ import torch
 import base64
 import shutil
 import cv2
+import mimetypes
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
@@ -28,6 +29,38 @@ class Tree(db.Model):
 with app.app_context():
     db.create_all()
 
+def extract_frames(video_path, output_folder, frame_rate=10):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    video_capture = cv2.VideoCapture(video_path)
+    
+    if not video_capture.isOpened():
+        print("Ошибка: Не удалось открыть видео.")
+        return
+
+    fps = video_capture.get(cv2.CAP_PROP_FPS)
+    frame_interval = int(fps / frame_rate)
+
+    current_frame = 0
+    frame_count = 0
+
+    while True:
+        ret, frame = video_capture.read()
+        
+        if not ret:
+            break
+
+        if current_frame % frame_interval == 0:
+            frame_filename = os.path.join(output_folder, f"frame_{frame_count:04d}.jpg")
+            cv2.imwrite(frame_filename, frame)
+            frame_count += 1
+        
+        current_frame += 1
+
+    video_capture.release()
+    print(f"Извлечено {frame_count} кадров в папку '{output_folder}'.")
+
 @app.route('/')
 def index():
     trees = Tree.query.order_by(Tree.id.desc()).all()
@@ -41,19 +74,37 @@ def upload_files():
     files = request.files.getlist('files')
     filenames = []
 
+    output_folder = os.path.join(os.path.dirname(__file__), "runs", "predict")
+    uploads_dir = os.path.join(os.path.dirname(__file__), "runs", "uploads")
+    if not os.path.exists(uploads_dir):
+        os.makedirs(uploads_dir)
+
     for file in files:
         if file.filename == '':
             return "No selected file", 400
         
-        filename = file.filename
-        filenames.append(filename)
-        photo_data = file.read()
-        new_tree = Tree(photo_name=filename, photo=photo_data, state='Health')
-        db.session.add(new_tree)
+        mime_type, _ = mimetypes.guess_type(file.filename)
+        if mime_type and mime_type.startswith('video/'):
+            video_path = os.path.join(uploads_dir, file.filename)
+            file.save(video_path)
+
+            # output_folder = os.path.join(os.path.dirname(__file__), "runs", "predict")
+            extract_frames(video_path, output_folder, frame_rate=10)
+        else:
+            filename = file.filename
+            photo_data = file.read()
+            new_tree = Tree(photo_name=filename, photo=photo_data, state='Health')
+            db.session.add(new_tree)
+            filenames.append(filename)
     
     db.session.commit()
     
     run_yolo_predictions()
+
+    if os.path.exists(uploads_dir):
+        shutil.rmtree(uploads_dir)
+    if os.path.exists(output_folder):
+        shutil.rmtree(output_folder)
 
     return redirect(url_for('index'))
 
@@ -89,6 +140,7 @@ def run_yolo_predictions():
 
     results = model.predict(predicted_folder, save=True)
     predicted1_folder = os.path.join(os.path.dirname(__file__), "runs", "detect", "predict")
+    detect = os.path.join(os.path.dirname(__file__), "runs", "detect")
 
     for tree in trees:
         processed_image_path = os.path.join(predicted1_folder, f"{tree.photo_name}.jpg")
@@ -112,13 +164,15 @@ def run_yolo_predictions():
                     tree.processed_photo = processed_img_file.read()
             else:
                 tree.state = 'Health'
+                db.session.delete(tree)
 
             tree.is_processed = True
             db.session.commit()
 
-    clear_folder(predicted_folder)
-    if os.path.exists(predicted1_folder):
-        shutil.rmtree(predicted1_folder)
+    if os.path.exists(predicted_folder):
+        shutil.rmtree(predicted_folder)
+    if os.path.exists(detect):
+        shutil.rmtree(detect)
 
 if __name__ == '__main__':
     with app.app_context():
