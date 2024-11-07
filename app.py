@@ -35,10 +35,10 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload_files():
-    if 'files[]' not in request.files:
+    if 'files' not in request.files:
         return "No file part", 400
     
-    files = request.files.getlist('files[]')
+    files = request.files.getlist('files')
     filenames = []
 
     for file in files:
@@ -48,10 +48,11 @@ def upload_files():
         filename = file.filename
         filenames.append(filename)
         photo_data = file.read()
-        new_tree = Tree(photo_name=filename ,photo=photo_data, state='Health')
+        new_tree = Tree(photo_name=filename, photo=photo_data, state='Health')
         db.session.add(new_tree)
     
     db.session.commit()
+    
     run_yolo_predictions()
 
     return redirect(url_for('index'))

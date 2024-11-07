@@ -26,10 +26,25 @@
                 <img src="{{ url_for('static', filename='img/close-x.svg') }}" alt="">
             </button>
             
-            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <!-- <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
                 <input type="file" name="files[]" multiple>
                 <button type="submit">Загрузить</button>
+            </form> -->
+
+            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                <label class="file-btn" for="showUploadForm">Выбрать файлы</label>
+                <input id="showUploadForm" name="files" multiple class="custom-file-input" type="file" onchange="updateFileLabel(this.files)">
+                <span id="file-label"></span>
+                <button type="submit">Загрузить</button>
             </form>
+            
+            <script>
+            function updateFileLabel(files) {
+                const fileLabel = document.getElementById('file-label');
+                const fileNames = Array.from(files).map(file => file.name).join(', ');
+                fileLabel.textContent = fileNames;
+            }
+            </script>
         </div>
 
         <div class="container_gallery">
@@ -51,8 +66,8 @@
 
     </main>
 
-    <!-- 
-    <footer>
+    
+    <!-- <footer>
         <img class="Logo" src="{{ url_for('static', filename='img/Logo.svg') }}" alt="">
         <p>@ 2024 Кемеровский Питомник</p>
         <div class="contacts">
@@ -60,7 +75,7 @@
             г. Кемерово, Тухачевского ул., 40
             info@svoy-pitomnik.ru
         </div>
-    </footer> 
-    -->
+    </footer>  -->
+   
 </body>
 </html>
