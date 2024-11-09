@@ -5,7 +5,6 @@ body{
   
 }
 
-
 /* Хедер */
 
 header{
@@ -99,7 +98,6 @@ button.btnDownload{
   display: block;
 }
 
-
 /* Экран загрузки */
 .LoadingScreen {
   position: fixed;
@@ -117,8 +115,6 @@ button.btnDownload{
   opacity: 1;
   z-index: 9999;
     
-
-
     /* width:100%;
     min-height:100%;
     background-color: rgba(0,0,0,0.5);
@@ -127,11 +123,6 @@ button.btnDownload{
     top:0px; */
     
 }
-
-
-
-
-
 
   /* Делаем наше поле ввода файла невидимым */
   .custom-file-input {
@@ -149,9 +140,36 @@ button.btnDownload{
     cursor: pointer;
     display: inline-block;
   }
+  
 
-
-
+  /* Styles for enlarged image */
+  .zoomed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .zoomed img {
+      max-width: 90%;
+      max-height: 90%;
+  }
+  #shelfInfo {
+      color: white;
+      margin: 10px 0;
+  }
+  #deleteButton {
+      padding: 10px 20px; 
+      background-color: red; 
+      color: white; 
+      border: none;
+      cursor: pointer;
+  }
 
   /* Футер */
 

@@ -29,18 +29,29 @@ class Tree(db.Model):
 with app.app_context():
     db.create_all()
 
-def extract_frames(video_path, output_folder, frame_rate=10):
+# @app.route('/delete/<int:item_id>', methods=['POST'])
+# def delete(item_id):
+#     tree = Tree.query.get_or_404(item_id)
+#     db.session.delete(tree)
+#     db.session.commit()
+#     return redirect(url_for('index'))
+
+def get_video_filename(video_path):
+    return os.path.basename(video_path)
+
+def extract_frames(video_path, output_folder, frame_rate=10, db_session=None):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
     video_capture = cv2.VideoCapture(video_path)
+    video_filename = get_video_filename(video_path)
     
     if not video_capture.isOpened():
         print("Ошибка: Не удалось открыть видео.")
         return
 
     fps = video_capture.get(cv2.CAP_PROP_FPS)
-    frame_interval = int(fps / frame_rate)
+    frame_interval = int(fps * frame_rate) # для кадра надо делить
 
     current_frame = 0
     frame_count = 0
@@ -52,8 +63,14 @@ def extract_frames(video_path, output_folder, frame_rate=10):
             break
 
         if current_frame % frame_interval == 0:
-            frame_filename = os.path.join(output_folder, f"frame_{frame_count:04d}.jpg")
-            cv2.imwrite(frame_filename, frame)
+            frame_filename = f"{video_filename}_{frame_count:04d}.jpg"
+            frame_path = os.path.join(output_folder, frame_filename)
+            cv2.imwrite(frame_path, frame)
+
+            _, buffer = cv2.imencode('.jpg', frame)
+            photo_data = buffer.tobytes()
+            new_tree = Tree(photo_name=frame_filename, photo=photo_data, state='Health')
+            db_session.add(new_tree)
             frame_count += 1
         
         current_frame += 1
@@ -87,9 +104,7 @@ def upload_files():
         if mime_type and mime_type.startswith('video/'):
             video_path = os.path.join(uploads_dir, file.filename)
             file.save(video_path)
-
-            # output_folder = os.path.join(os.path.dirname(__file__), "runs", "predict")
-            extract_frames(video_path, output_folder, frame_rate=10)
+            extract_frames(video_path, output_folder, frame_rate=10, db_session=db.session)
         else:
             filename = file.filename
             photo_data = file.read()
