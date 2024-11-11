@@ -5,7 +5,6 @@ body{
   
 }
 
-
 /* Хедер */
 
 header{
@@ -87,7 +86,6 @@ button.btnDownload{
 
 
 
-
 /* Экран загрузки */
 .LoadingScreen {
   position: fixed;
@@ -104,6 +102,7 @@ button.btnDownload{
   transform: translate(-50%, -50%);
   opacity: 1;
   z-index: 9999;
+<<<<<<< HEAD
   
   
   padding: 40px;
@@ -112,6 +111,9 @@ button.btnDownload{
   
 
 
+=======
+    
+>>>>>>> 0704e98521955abfcf647e836cea3d46638aa82c
     /* width:100%;
     min-height:100%;
     background-color: rgba(0,0,0,0.5);
@@ -121,6 +123,7 @@ button.btnDownload{
     
 }
 
+<<<<<<< HEAD
 .overlay {
   position: fixed;
   top: 0;
@@ -186,10 +189,15 @@ h3{
 
 /* Делаем наше поле ввода файла невидимым */
 .custom-file-input {
+=======
+  /* Делаем наше поле ввода файла невидимым */
+  .custom-file-input {
+>>>>>>> 0704e98521955abfcf647e836cea3d46638aa82c
     opacity: 0;
     width: 0.1px;
     height: 0.1px;
     z-index: -1; /* "Скрываем" поле ввода */
+<<<<<<< HEAD
 }
 
 /* Создаем "подмену" кнопки */
@@ -309,9 +317,48 @@ button.downloadBtn2{
   border: none;
   cursor: pointer;
 }
+=======
+  }
+  /* Создаем "подмену" кнопки */
+  .file-btn {
+    background: #f1f1f1;
+    border: 1px solid rgba(8, 8, 8, 0.2);
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+  }
+  
+>>>>>>> 0704e98521955abfcf647e836cea3d46638aa82c
 
-
-
+  /* Styles for enlarged image */
+  .zoomed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .zoomed img {
+      max-width: 90%;
+      max-height: 90%;
+  }
+  #shelfInfo {
+      color: white;
+      margin: 10px 0;
+  }
+  #deleteButton {
+      padding: 10px 20px; 
+      background-color: red; 
+      color: white; 
+      border: none;
+      cursor: pointer;
+  }
 
 
 
