@@ -21,49 +21,53 @@
             <img src="{{ url_for('static', filename='img/скачать.svg') }}" alt=""> Загрузить
         </button>
 
+        <div class="overlay" onclick="closeLoadingScreen()"></div>
         <div class="LoadingScreen">
-            <button onclick="closeLoadingScreen()">
-                <img src="{{ url_for('static', filename='img/close-x.svg') }}" alt="">
-            </button>
-            
-            <!-- <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <div class="VerhLoadingScreen">
+                <h3>Загрузка файлов</h3>
+                <button class="close-x" onclick="closeLoadingScreen()">
+                   <img src="{{ url_for('static', filename='img/close-x.svg') }}" alt="">
+                </button>
+            </div>
+              <!-- <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
                 <input type="file" name="files[]" multiple>
                 <button type="submit">Загрузить</button>
             </form> -->
+            <div class="listFiles">
+                <span class="file" id="file-label"></span>
+            </div>
 
+
+            
             <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
                 <label class="file-btn" for="showUploadForm">Выбрать файлы</label>
                 <input id="showUploadForm" name="files" multiple class="custom-file-input" type="file" onchange="updateFileLabel(this.files)">
-                <span id="file-label"></span>
-                <button type="submit">Загрузить</button>
+                <button class="downloadBtn2" type="submit">Загрузить</button>
             </form>
-            
-            <script>
-            function updateFileLabel(files) {
-                const fileLabel = document.getElementById('file-label');
-                const fileNames = Array.from(files).map(file => file.name).join(', ');
-                fileLabel.textContent = fileNames;
-            }
-            </script>
         </div>
+
+      
+
 
         <div class="container_gallery">
             <div class="gallery">
                 {% for tree in trees %}
-                    {% if tree.state != 'Health' %}
-                        <div>
-                            <h3>Номер полки</h3>
-                            {% if tree.processed_photo %}
-                                <img src="data:image/jpeg;base64,{{ tree.processed_photo | b64encode }}" alt="Processed Tree Image">
-                            {% else %}
-                                <p>No processed image available</p>
-                            {% endif %}
-                        </div>
-                    {% endif %}
+                    <div >
+                        <h3>Номер полки: {{ tree.id }}</h3>
+                        <img src="data:image/jpeg;base64,{{ tree.processed_photo | b64encode }}" alt="Processed Tree Image" class="thumbnail" onclick="zoomImage(this.src, '{{ tree.id }}')">
+                    </div>
                 {% endfor %}
             </div>
         </div>
 
+
+
+
+        <div class="zoomed" id="zoomedImage" onclick="closeZoom()" style="display: none;">
+            <img id="zoomedImg" src="" alt="Zoomed Image">
+            <div id="shelfInfo"></div>
+            <button id="deleteButton" onclick="deleteImage(event, '')">Удалить</button>
+        </div>
     </main>
 
     
