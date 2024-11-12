@@ -252,15 +252,14 @@ button.downloadBtn2{
 
 .gallery {
   display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
+  flex-wrap: wrap;
+  /* flex-direction: row; */
   justify-content: center;
-  
 }
 
 
 .gallery div {
-  overflow: hidden;
+  /* overflow: hidden; */
   background: white;
   border-radius: 18px;
   

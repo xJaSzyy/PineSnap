@@ -30,42 +30,28 @@
                 </button>
             </div>
           
-
             <div class="listFiles">
                 <span class="file" id="file-label"></span>
             </div>
-           
-
-
             
             <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
                 <label class="file-btn" for="showUploadForm">Выбрать файлы</label>
                 
                 <button class="downloadBtn2" type="submit">Загрузить</button>
                 <input id="showUploadForm" name="files" multiple class="custom-file-input" type="file" accept=".mp4, .mov, .avi, .jpg, .jpeg, .png" onchange="updateFileLabel(this.files)">
-                
-                
             </form>
         </div>
-
-      
-
 
         <div class="container_gallery">
             <div class="gallery">
                 {% for tree in trees %}
-                    <div >
-                        <h3>Номер полки: {{ tree.id }}</h3>
-                        <img src="data:image/jpeg;base64,{{ tree.processed_photo | b64encode }}" alt="Processed Tree Image" class="thumbnail" onclick="zoomImage(this.src, '{{ tree.id }}')">
+                    <div>
+                        <h3>{{ tree.photo_date.strftime('%d %B %Y') }}</h3>
+                        <img src="{{ url_for('static', filename=tree.processed_photo) }}" alt="Processed Image" class="thumbnail" onclick="zoomImage(this.src, '{{ tree.id }}')">
                     </div>
                 {% endfor %}
             </div>
         </div>
-
-
-
-
-
 
         <div class="zoomed" id="zoomedImage" onclick="closeZoom()" style="display: none;">
             <img id="zoomedImg" src="" alt="Zoomed Image">
@@ -74,7 +60,6 @@
         </div>
     </main>
 
-    
     <!-- <footer>
         <img class="Logo" src="{{ url_for('static', filename='img/Logo.svg') }}" alt="">
         <p>@ 2024 Кемеровский Питомник</p>
