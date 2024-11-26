@@ -17,9 +17,16 @@
     </header>
 
     <main>
+
+        <button><a href="{{ url_for('static', filename='pages/model.html') }}">модель</a></button>
+
+        <!-- <button>перейти к стеллажам</button> -->
+
         <button onclick="openLoadingScreen()" class="btnDownload">
             <img src="{{ url_for('static', filename='img/скачать.svg') }}" alt=""> Загрузить
         </button>
+
+        
 
         <div class="overlay" onclick="closeLoadingScreen()"></div>
         <div class="LoadingScreen">
