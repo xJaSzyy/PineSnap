@@ -109,11 +109,10 @@ select {
 }
 
 .close-x {
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    font-size: 20px;
-    
+  border: none;
+  text-decoration: none;
+  background-color: #FDFEFE;
+  cursor: pointer;
 }
 
 form {
