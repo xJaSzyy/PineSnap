@@ -8,10 +8,10 @@
     <title>Модель</title>
 </head>
 <body>
-   
+   <button><a href="{{ url_for('index') }}">Вернуться </a></button>
     <h1>Блок обзор файлов</h1> 
 
-    <button><a href="{{ url_for('index') }}">Вернуться </a></button>
+    
 
     <main>
 
@@ -72,7 +72,7 @@
         <div class="CreateDataSet">
             <div class="VerhLoadingScreen">
                 <h3>Создать новый датасет</h3>
-                <button class="close-x" onclick="closeCreateDataSet()"></button>
+                <button class="close-x" onclick="closeCreateDataSet()">х</button>
             </div>
     
 
