@@ -84,7 +84,34 @@ button.btnDownload{
   margin-right: 10px;
 }
 
+a{
+  text-decoration: none;
+  color: #FDFEFE;
+}
 
+button.model{
+  width: 241px;
+  height: 56px;
+  background-color: #4db32e;
+  color: #FDFEFE;
+  border-radius: 18px;
+  border: none;
+  text-decoration: none;
+  font-size: 23px;
+  /* padding-left: 56px;
+  padding-right: 56px; */
+  text-align: right;
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  float: right;
+  justify-content: center;
+  align-items: center;
+}
+
+.model:hover {
+  background-color: #79d15e;
+}
 
 /* Экран загрузки */
 .LoadingScreen {
