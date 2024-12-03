@@ -95,12 +95,6 @@ function filterFiles() {
     }
 }
 
-function updateFileLabel(files) {
-    const fileNames = Array.from(files).map(file => file.name).join(', ');
-    const label = document.querySelector('.selectFolderBtn-btn');
-    label.textContent = fileNames.length > 0 ? `Выбрано файлов: ${fileNames}` : 'Выбрать папку';
-}
-
 document.getElementById('photoForm').onsubmit = function(event) {
     event.preventDefault();
     const numPhotos = document.getElementById('numPhotos').value;

@@ -252,7 +252,19 @@ def upload_model_files():
         
         txt_path = None
         
-        if file_extension != '.txt':
+        if file_extension == '.txt':
+            # Проверяем, есть ли одноименный файл в базе данных
+            image_filename = 'model_images/' + os.path.splitext(filename)[0] + '.jpg'  # Предполагаем, что изображение имеет расширение .jpg
+            existing_entry = Yolka.query.filter_by(photo=image_filename).first()
+            
+            if existing_entry:
+                # Если запись найдена, обновляем поле txt
+                existing_entry.txt = relative_image_path
+                print(f"Обновлено поле txt для {image_filename}")
+            else:
+                print(f"Запись для {image_filename} не найдена в базе данных.")
+        else:
+            # Обрабатываем изображения
             txt_filename = os.path.splitext(filename)[0] + '.txt'
             txt_file_path = os.path.join(images_dir, txt_filename)
             
@@ -265,6 +277,7 @@ def upload_model_files():
 
             new_entries.append(Yolka(photo=relative_image_path, txt=txt_path, photo_date=datetime.now()))
 
+    # Сохраняем новые записи
     try:
         db.session.bulk_save_objects(new_entries)
         db.session.commit()
@@ -274,7 +287,7 @@ def upload_model_files():
         print(f"Ошибка при сохранении в базу данных: {e}")
         return "Error saving to database", 500
 
-    return redirect(url_for('model')) 
+    return redirect(url_for('model'))
 
 @app.route('/copy_photos', methods=['POST'])
 def copy_photos():
