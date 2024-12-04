@@ -253,18 +253,15 @@ def upload_model_files():
         txt_path = None
         
         if file_extension == '.txt':
-            # Проверяем, есть ли одноименный файл в базе данных
-            image_filename = 'model_images/' + os.path.splitext(filename)[0] + '.jpg'  # Предполагаем, что изображение имеет расширение .jpg
+            image_filename = 'model_images/' + os.path.splitext(filename)[0] + '.jpg'
             existing_entry = Yolka.query.filter_by(photo=image_filename).first()
             
             if existing_entry:
-                # Если запись найдена, обновляем поле txt
                 existing_entry.txt = relative_image_path
                 print(f"Обновлено поле txt для {image_filename}")
             else:
                 print(f"Запись для {image_filename} не найдена в базе данных.")
         else:
-            # Обрабатываем изображения
             txt_filename = os.path.splitext(filename)[0] + '.txt'
             txt_file_path = os.path.join(images_dir, txt_filename)
             
@@ -277,7 +274,6 @@ def upload_model_files():
 
             new_entries.append(Yolka(photo=relative_image_path, txt=txt_path, photo_date=datetime.now()))
 
-    # Сохраняем новые записи
     try:
         db.session.bulk_save_objects(new_entries)
         db.session.commit()
@@ -468,8 +464,7 @@ def create_train_script():
             selected_dataset += os.path.sep
 
         script_path = os.path.join(selected_dataset, 'train.py')
-        
-        path = selected_dataset.replace("\\", "\\\\")
+        abs_selected_dataset = os.path.abspath(selected_dataset)
         
         script_content = f"""import torch
 import os
@@ -480,7 +475,7 @@ from ultralytics import YOLO
 if __name__ == "__main__":
     model = YOLO('yolo11n.pt')
     results = model.train(
-        data='{os.path.join(path, 'data.yaml')}',
+        data='{(os.path.join(abs_selected_dataset, 'data.yaml')).replace("\\", "\\\\")}',
         imgsz={imgsz},
         epochs={epochs},
         batch={batch},
@@ -510,14 +505,14 @@ def train():
         if not selected_dataset.endswith(os.path.sep):
             selected_dataset += os.path.sep
 
-        path = os.path.normpath(selected_dataset)
-        data_yaml_path = os.path.join(path, 'data.yaml')
+        abs_selected_dataset = os.path.abspath(selected_dataset)
+        data_yaml_path = (os.path.join(abs_selected_dataset, 'data.yaml')).replace("\\", "\\\\")
 
         if not os.path.exists(data_yaml_path):
             print(f'Ошибка: файл не найден по пути {data_yaml_path}')
             return redirect(url_for('model'))
         
-        results_dir = os.path.join(path, 'runs')
+        results_dir = os.path.join(abs_selected_dataset, 'runs')
         os.makedirs(results_dir, exist_ok=True)
 
         model = YOLO('yolo11n.pt')
@@ -534,8 +529,6 @@ def train():
         print(f'Ошибка при обучении: {e}', 'error')
     
     return redirect(url_for('model'))
-
-
 
 if __name__ == '__main__':
     with app.app_context():

@@ -41,7 +41,7 @@
                 <span class="file" id="file-label"></span>
             </div>
             
-            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                 <label class="file-btn" for="showUploadForm">Выбрать файлы</label>
                 
                 <button class="downloadBtn2" type="submit">Загрузить</button>

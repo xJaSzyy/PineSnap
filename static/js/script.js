@@ -21,9 +21,22 @@ document.getElementById('showUploadForm').addEventListener('click', function() {
 })
 
 function updateFileLabel(files) {
-       const fileLabel = document.getElementById('file-label');
-       const fileNames = Array.from(files).map(file => file.name).join(', ');
-       fileLabel.textContent = fileNames;
+    const fileLabel = document.getElementById('file-label');
+    if (files.length > 0) {
+        const fileNames = Array.from(files).map(file => file.name).join('<br>');
+        fileLabel.innerHTML = fileNames;
+    } else {
+        fileLabel.textContent = 'Нет загружаемых файлов';
+    }
+}
+
+function validateForm() {
+    const fileInput = document.getElementById('showUploadForm');
+    if (fileInput.files.length === 0) {
+        alert('Пожалуйста, добавьте файлы для загрузки.');
+        return false;
+    }
+    return true;
 }
 
 function zoomImage(src, shelfId) {
@@ -244,11 +257,16 @@ $(document).ready(function() {
     });
 });
 
-
 function updateFileCount() {
     const select = document.getElementById('datasets');
     const selectedOptions = Array.from(select.selectedOptions);
     const count = selectedOptions.length;
 
     console.log(`Количество выбранных файлов: ${count}`);
+}
+
+async function selectFolder() {
+    const folderHandle = await window.showDirectoryPicker();
+    const path = folderHandle.name;
+    document.getElementById('destinationFolder').value = path;
 }
