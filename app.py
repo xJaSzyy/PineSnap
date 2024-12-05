@@ -464,7 +464,7 @@ def create_train_script():
             selected_dataset += os.path.sep
 
         script_path = os.path.join(selected_dataset, 'train.py')
-        abs_selected_dataset = os.path.abspath(selected_dataset)
+        path = selected_dataset.replace("\\", "\\\\")
         
         script_content = f"""import torch
 import os
@@ -475,7 +475,7 @@ from ultralytics import YOLO
 if __name__ == "__main__":
     model = YOLO('yolo11n.pt')
     results = model.train(
-        data='{(os.path.join(abs_selected_dataset, 'data.yaml')).replace("\\", "\\\\")}',
+        data='{os.path.join(path, 'data.yaml')}',
         imgsz={imgsz},
         epochs={epochs},
         batch={batch},
@@ -505,15 +505,14 @@ def train():
         if not selected_dataset.endswith(os.path.sep):
             selected_dataset += os.path.sep
 
-        abs_selected_dataset = os.path.abspath(selected_dataset)
-        data_yaml_path = (os.path.join(abs_selected_dataset, 'data.yaml')).replace("\\", "\\\\")
+        path = os.path.normpath(selected_dataset)
+        data_yaml_path = os.path.join(path, 'data.yaml')
 
         if not os.path.exists(data_yaml_path):
             print(f'Ошибка: файл не найден по пути {data_yaml_path}')
             return redirect(url_for('model'))
         
-        results_dir = os.path.join(abs_selected_dataset, 'runs')
-        os.makedirs(results_dir, exist_ok=True)
+        results_dir = os.path.join(path, 'runs')
 
         model = YOLO('yolo11n.pt')
         results = model.train(

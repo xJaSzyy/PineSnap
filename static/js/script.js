@@ -265,8 +265,8 @@ function updateFileCount() {
     console.log(`Количество выбранных файлов: ${count}`);
 }
 
-async function selectFolder() {
-    const folderHandle = await window.showDirectoryPicker();
-    const path = folderHandle.name;
-    document.getElementById('destinationFolder').value = path;
-}
+// async function selectFolder() {
+//     const folderHandle = await window.showDirectoryPicker();
+//     const path = folderHandle.name;
+//     document.getElementById('destinationFolder').value = path;
+// }
