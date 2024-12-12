@@ -26,14 +26,10 @@ class Tree(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     photo = db.Column(db.String(255), nullable=False) 
     processed_photo = db.Column(db.String(255), nullable=True)
+    txt = db.Column(db.String(255), nullable=True)
     class_name = db.Column(db.Enum('Disease', 'Health'), nullable=False, default='Health')
     photo_date = db.Column(db.DateTime, nullable=False)
-
-class Yolka(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    photo = db.Column(db.String(255), nullable=True)
-    txt = db.Column(db.String(255), nullable=True)
-    photo_date = db.Column(db.DateTime, nullable=True)
+    modul = db.Column(db.Boolean, nullable=False)  # 0 for /uploads, 1 for /upload_model_files
 
 class Datasets(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -93,7 +89,7 @@ def extract_frames(video_path, output_folder, frame_rate=10, db_session=None):
 
 @app.route('/')
 def index():
-    trees = Tree.query.order_by(Tree.id.desc()).all()
+    trees = Tree.query.filter_by(modul=0).order_by(Tree.id.desc()).all()
     return render_template('index.html', trees=trees)
 
 @app.route('/upload', methods=['POST'])
@@ -124,7 +120,7 @@ def upload_files():
             relative_path = os.path.relpath(photo, start=os.path.join(os.path.dirname(__file__), "static")) 
             relative_path = relative_path.replace("\\", "/")
             file_creation_date = datetime.fromtimestamp(os.path.getctime(photo)) 
-            new_tree = Tree(photo=relative_path, class_name='Health', photo_date=file_creation_date)
+            new_tree = Tree(photo=relative_path, class_name='Health', photo_date=file_creation_date, modul=0)
             db.session.add(new_tree)
             filenames.append(filename)
 
@@ -140,7 +136,7 @@ def run_yolo_predictions():
     predicted_folder = os.path.join(os.path.dirname(__file__), "runs", "predict")
     os.makedirs(predicted_folder, exist_ok=True)
 
-    trees = Tree.query.filter(Tree.processed_photo.is_(None)).all()
+    trees = Tree.query.filter(Tree.processed_photo.is_(None), Tree.modul == 0).all()
     for tree in trees:
         image_path = os.path.join(os.path.dirname(__file__), "static", tree.photo)
         destination_path = os.path.join(predicted_folder, os.path.basename(tree.photo))
@@ -176,7 +172,7 @@ def run_yolo_predictions():
 
     for tree in trees:
         processed_image_path = os.path.join(destination_folder, os.path.basename(tree.photo))
-        
+            
         if os.path.exists(processed_image_path):
             damage_detected = False
             for result in results:
@@ -205,18 +201,15 @@ def run_yolo_predictions():
         shutil.rmtree(run)
 
 
-
-
-
 @app.route('/model')
 def model():
-    yolki = Yolka.query.order_by(Yolka.id.desc()).all()
-    filenames = [os.path.basename(yolka.photo) for yolka in yolki]
-    non_empty_count = db.session.query(func.count(Yolka.txt)).filter(Yolka.txt.isnot(None), Yolka.txt != '').scalar()
+    trees = Tree.query.filter_by(modul=1).order_by(Tree.id.desc()).all()
+    filenames = [os.path.basename(tree.photo) for tree in trees]
+    non_empty_count = db.session.query(func.count(Tree.txt)).filter(Tree.txt.isnot(None), Tree.txt != '').scalar()  # Update to Tree
 
     datasets = Datasets.query.all()
 
-    return render_template('model.html', yolki=yolki, filenames=filenames, non_empty_count=non_empty_count, datasets=datasets)
+    return render_template('model.html', trees=trees, filenames=filenames, non_empty_count=non_empty_count, datasets=datasets)
 
 @app.route('/upload_model_files', methods=['POST'])
 def upload_model_files():
@@ -254,7 +247,7 @@ def upload_model_files():
         
         if file_extension == '.txt':
             image_filename = 'model_images/' + os.path.splitext(filename)[0] + '.jpg'
-            existing_entry = Yolka.query.filter_by(photo=image_filename).first()
+            existing_entry = Tree.query.filter_by(photo=image_filename).first()
             
             if existing_entry:
                 existing_entry.txt = relative_image_path
@@ -272,7 +265,7 @@ def upload_model_files():
             else:
                 print(f"Текстовый файл не найден: {txt_file_path}")
 
-            new_entries.append(Yolka(photo=relative_image_path, txt=txt_path, photo_date=datetime.now()))
+            new_entries.append(Tree(photo=relative_image_path, txt=txt_path, photo_date=datetime.now(), modul=1))
 
     try:
         db.session.bulk_save_objects(new_entries)
@@ -318,7 +311,7 @@ def copy_photos():
     except Exception as e:
         return jsonify({"error": f"Не удалось создать папку: {str(e)}"}), 500
 
-    photos = Yolka.query.filter(Yolka.txt.isnot(None)).all()
+    photos = Tree.query.filter(Tree.txt.isnot(None), Tree.modul == 1).all()
     print(f"Количество фотографий с текстом в базе данных: {len(photos)}")
     
     if not photos:
