@@ -27,7 +27,7 @@
         <div class="listFiles">
             <span class="file" id="file-label"></span>
         </div>
-        
+
         <form id="uploadForm" action="{{ url_for('upload_model_files') }}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <label class="file-btn" for="showUploadForm">Выбрать файлы</label>
             
@@ -74,27 +74,13 @@
                 <h3>Создать новый датасет</h3>
                 <button class="close-x" onclick="closeCreateDataSet()"><img src="{{ url_for('static', filename='img/close-x.svg') }}" alt=""></button>
             </div>
-    
-                <!-- <div class="listFiles">
-                    <label class="fileList" for="file">Список файлов</label>
-                    <select size="20" id="vegetables" name="vegetables" multiple onchange="updateFileCount()">
-                        {% for yolka in yolki %}
-                            {% if yolka.txt is not none %}
-                                <option value="{{ yolka.photo }}" data-txt="{{ yolka.txt }}">{{ filenames[loop.index0] }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div> -->
 
                 <form id="photoForm" action="/copy_photos" method="post">
                     <label for="numPhotos">Количество фотографий:</label>
                     <input type="number" id="numPhotos" name="num_photos" min="1" max="{{ non_empty_count }}" value="{{ non_empty_count }}" required><br>
                     
-                    <label for="datasetName">Название папки датасета:</label>
-                    <input type="text" id="datasetName" name="dataset_name" required placeholder="Введите название папки"><br>
-                
-                    <label for="destinationFolder">Путь к папке назначения:</label>
-                    <input type="text" id="destinationFolder" name="destination_folder" required placeholder="Введите путь к папке"><br>
+                    <label for="datasetName">Название датасета:</label>
+                    <input type="text" id="datasetName" name="dataset_name" required placeholder="Введите название"><br>
                 
                     <label for="trainSize">Размер train выборки (0-1):</label>
                     <input type="number" id="trainSize" name="train_size" min="0" max="1" step="0.01" value="0.8" required placeholder="Например, 0.8"><br>
@@ -111,7 +97,8 @@
             <label for="datasets">Выберите датасет:</label>
             <select id="datasets" name="selected_dataset" required>
                 {% for dataset in datasets %}
-                    <option value="{{ dataset.dataset_path }}">{{ dataset.dataset_name }}</option>
+                    {% set dataset_name = dataset.dataset_path.split('\\')[-1] %}
+                    <option value="{{ dataset.dataset_path }}">{{ dataset_name }}</option>
                 {% endfor %}
             </select><br>
             
@@ -126,10 +113,15 @@
             <label for="datasets">Выберите датасет:</label>
             <select id="datasets" name="selected_dataset" required>
                 {% for dataset in datasets %}
-                    <option value="{{ dataset.dataset_path }}">{{ dataset.dataset_name }}</option>
+                    {% set dataset_name = dataset.dataset_path.split('\\')[-1] %}
+                    <option value="{{ dataset.dataset_path }}">{{ dataset_name }}</option>
                 {% endfor %}
             </select><br>
-
+            
+            <div class="form-group">
+                <label for="model_name">Название модели:</label>
+                <input type="text" id="model_name" name="model_name" value="Моделька" required>
+            </div>
             <div class="form-group">
                 <label for="imgsz">Размер изображения:</label>
                 <input type="number" id="imgsz" name="imgsz" value="640" required>
@@ -149,9 +141,7 @@
 
             <button type="submit">Запустить обучение</button>
         </form>
-       
     </div>
-
 
 </body>
 </html>
