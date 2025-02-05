@@ -22,7 +22,7 @@ app.secret_key = secret_key
 
 db = SQLAlchemy(app)
 
-class Tree(db.Model):
+class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     photo = db.Column(db.String(255), nullable=False) 
     processed_photo = db.Column(db.String(255), nullable=True)
@@ -33,22 +33,15 @@ class Tree(db.Model):
 
 class Dataset(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    dataset_path = db.Column(db.String(255), nullable=False)
+    dataset = db.Column(db.String(255), nullable=False)
 
 class Model(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    model_name = db.Column(db.String(255), nullable=False)
-    model_path = db.Column(db.String(255), nullable=False)
+    model = db.Column(db.String(255), nullable=False)
 
 with app.app_context():
     db.create_all()
 
-# @app.route('/delete/<int:item_id>', methods=['POST'])
-# def delete(item_id):
-#     tree = Tree.query.get_or_404(item_id)
-#     db.session.delete(tree)
-#     db.session.commit()
-#     return redirect(url_for('index'))
 
 def get_video_filename(video_path):
     return os.path.basename(video_path)
@@ -82,8 +75,8 @@ def extract_frames(video_path, output_folder, frame_rate=10, db_session=None):
             relative_path = os.path.relpath(frame_path, start=os.path.join(os.path.dirname(__file__), "static"))
             relative_path = relative_path.replace("\\", "/")
             file_creation_date = datetime.fromtimestamp(os.path.getctime(video_path))
-            new_tree = Tree(photo=relative_path, is_discovered=0, photo_date=file_creation_date)
-            db_session.add(new_tree)
+            new_photo = Photo(photo=relative_path, is_discovered=0, photo_date=file_creation_date)
+            db_session.add(new_photo)
             frame_count += 1
         
         current_frame += 1
@@ -93,9 +86,9 @@ def extract_frames(video_path, output_folder, frame_rate=10, db_session=None):
 
 @app.route('/')
 def index():
-    trees = Tree.query.filter_by(modul=0).order_by(Tree.id.desc()).all()
+    photos = Photo.query.filter_by(modul=0).order_by(Photo.id.desc()).all()
     models = Model.query.all()
-    return render_template('index.html', trees=trees, models=models)
+    return render_template('index.html', photos=photos, models=models)
 
 @app.route('/upload', methods=['POST'])
 def upload_files():
@@ -125,8 +118,8 @@ def upload_files():
             relative_path = os.path.relpath(photo, start=os.path.join(os.path.dirname(__file__), "static")) 
             relative_path = relative_path.replace("\\", "/")
             file_creation_date = datetime.fromtimestamp(os.path.getctime(photo)) 
-            new_tree = Tree(photo=relative_path, is_discovered=0, photo_date=file_creation_date, modul=0)
-            db.session.add(new_tree)
+            new_photo = Photo(photo=relative_path, is_discovered=0, photo_date=file_creation_date, modul=0)
+            db.session.add(new_photo)
             filenames.append(filename)
 
     db.session.commit()
@@ -141,10 +134,10 @@ def run_yolo_predictions():
     predicted_folder = os.path.join(os.path.dirname(__file__), "runs", "predict")
     os.makedirs(predicted_folder, exist_ok=True)
 
-    trees = Tree.query.filter(Tree.processed_photo.is_(None), Tree.modul == 0).all()
-    for tree in trees:
-        image_path = os.path.join(os.path.dirname(__file__), "static", tree.photo)
-        destination_path = os.path.join(predicted_folder, os.path.basename(tree.photo))
+    photos = Photo.query.filter(Photo.processed_photo.is_(None), Photo.modul == 0).all()
+    for photo in photos:
+        image_path = os.path.join(os.path.dirname(__file__), "static", photo.photo)
+        destination_path = os.path.join(predicted_folder, os.path.basename(photo.photo))
 
         if os.path.exists(image_path):
             if os.path.abspath(image_path) == os.path.abspath(destination_path):
@@ -175,13 +168,13 @@ def run_yolo_predictions():
         destination = os.path.join(destination_folder, item)
         shutil.copy2(source, destination)
 
-    for tree in trees:
-        processed_image_path = os.path.join(destination_folder, os.path.basename(tree.photo))
+    for photo in photos:
+        processed_image_path = os.path.join(destination_folder, os.path.basename(photo.photo))
             
         if os.path.exists(processed_image_path):
             damage_detected = False
             for result in results:
-                if result.path == os.path.join(predicted_folder, os.path.basename(tree.photo)):
+                if result.path == os.path.join(predicted_folder, os.path.basename(photo.photo)):
                     if result.boxes is not None and len(result.boxes) > 0:
                         for box in result.boxes:
                             class_id = int(box.cls)
@@ -192,13 +185,13 @@ def run_yolo_predictions():
                     break 
 
             if damage_detected:
-                tree.is_discovered = 1
+                photo.is_discovered = 1
                 relative_processed_path = os.path.relpath(processed_image_path, start=os.path.join(os.path.dirname(__file__), "static"))
                 relative_processed_path = relative_processed_path.replace("\\", "/")
-                tree.processed_photo = relative_processed_path
+                photo.processed_photo = relative_processed_path
             else:
-                tree.is_discovered = 0
-                db.session.delete(tree)
+                photo.is_discovered = 0
+                db.session.delete(photo)
 
             db.session.commit()
 
@@ -208,13 +201,13 @@ def run_yolo_predictions():
 
 @app.route('/model')
 def model():
-    trees = Tree.query.filter_by(modul=1).order_by(Tree.id.desc()).all()
-    filenames = [os.path.basename(tree.photo) for tree in trees]
-    non_empty_count = db.session.query(func.count(Tree.txt)).filter(Tree.txt.isnot(None), Tree.txt != '').scalar()  # Update to Tree
+    photos = Photo.query.filter_by(modul=1).order_by(Photo.id.desc()).all()
+    filenames = [os.path.basename(photo.photo) for photo in photos]
+    non_empty_count = db.session.query(func.count(Photo.txt)).filter(Photo.txt.isnot(None), Photo.txt != '').scalar() 
 
     datasets = Dataset.query.all()
 
-    return render_template('model.html', trees=trees, filenames=filenames, non_empty_count=non_empty_count, datasets=datasets)
+    return render_template('model.html', photos=photos, filenames=filenames, non_empty_count=non_empty_count, datasets=datasets)
 
 @app.route('/upload_model_files', methods=['POST'])
 def upload_model_files():
@@ -252,7 +245,7 @@ def upload_model_files():
         
         if file_extension == '.txt':
             image_filename = 'model_images/' + os.path.splitext(filename)[0] + '.jpg'
-            existing_entry = Tree.query.filter_by(photo=image_filename).first()
+            existing_entry = Photo.query.filter_by(photo=image_filename).first()
             
             if existing_entry:
                 existing_entry.txt = relative_image_path
@@ -270,7 +263,7 @@ def upload_model_files():
             else:
                 print(f"Текстовый файл не найден: {txt_file_path}")
 
-            new_entries.append(Tree(photo=relative_image_path, txt=txt_path, photo_date=datetime.now(), modul=1))
+            new_entries.append(Photo(photo=relative_image_path, txt=txt_path, photo_date=datetime.now(), modul=1))
 
     try:
         db.session.bulk_save_objects(new_entries)
@@ -314,7 +307,7 @@ def copy_photos():
     except Exception as e:
         return jsonify({"error": f"Не удалось создать папку: {str(e)}"}), 500
 
-    photos = Tree.query.filter(Tree.txt.isnot(None), Tree.modul == 1).all()
+    photos = Photo.query.filter(Photo.txt.isnot(None), Photo.modul == 1).all()
     print(f"Количество фотографий с текстом в базе данных: {len(photos)}")
     
     if not photos:
@@ -361,7 +354,7 @@ def copy_photos():
 
     split_and_save_dataset(dataset_folder, yolo_folder, test_size=val_size)
     
-    new_dataset = Dataset(dataset_path=yolo_folder)
+    new_dataset = Dataset(dataset=yolo_folder)
     try:
         db.session.add(new_dataset)
         db.session.commit()
@@ -522,14 +515,14 @@ def train():
         )
         print('Обучение завершено успешно!', 'success')
 
-        model_path = os.path.join(results_dir, 'weights', 'best.pt')
+        model = os.path.join(results_dir, 'weights', 'best.pt')
         destination_path = os.path.join('static', 'models', f"{model_name}") 
         destination_path = destination_path.replace("\\", "/")
         if not os.path.exists(destination_path):
             os.makedirs(destination_path)
-        shutil.copy(model_path, destination_path)
+        shutil.copy(model, destination_path)
 
-        new_model = Model(model_name=model_name, model_path=destination_path)
+        new_model = Model(model=destination_path)
         try:
             db.session.add(new_model)
             db.session.commit()

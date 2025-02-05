@@ -49,8 +49,8 @@
         <div class="listFiles">
             <label class="fileList" for="file">Список файлов</label>
             <select size="20" id="fruits" name="fruits" onchange="updateImage()">
-                {% for tree in trees %}
-                    <option value="{{ tree.photo }}" data-txt="{{ tree.txt }}">{{ filenames[loop.index0] }}</option>
+                {% for photo in photos %}
+                    <option value="{{ photo.photo }}" data-txt="{{ photo.txt }}">{{ filenames[loop.index0] }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -97,8 +97,8 @@
             <label for="datasets">Выберите датасет:</label>
             <select id="datasets" name="selected_dataset" required>
                 {% for dataset in datasets %}
-                    {% set dataset_name = dataset.dataset_path.split('\\')[-1] %}
-                    <option value="{{ dataset.dataset_path }}">{{ dataset_name }}</option>
+                    {% set dataset_name = dataset.dataset.split('\\')[-1] %}
+                    <option value="{{ dataset.dataset }}">{{ dataset_name }}</option>
                 {% endfor %}
             </select><br>
             
@@ -113,14 +113,14 @@
             <label for="datasets">Выберите датасет:</label>
             <select id="datasets" name="selected_dataset" required>
                 {% for dataset in datasets %}
-                    {% set dataset_name = dataset.dataset_path.split('\\')[-1] %}
-                    <option value="{{ dataset.dataset_path }}">{{ dataset_name }}</option>
+                    {% set dataset_name = dataset.dataset.split('\\')[-1] %}
+                    <option value="{{ dataset.dataset }}">{{ dataset_name }}</option>
                 {% endfor %}
             </select><br>
             
             <div class="form-group">
                 <label for="model_name">Название модели:</label>
-                <input type="text" id="model_name" name="model_name" value="Моделька" required>
+                <input type="text" id="model_name" name="model_name" value="model" required>
             </div>
             <div class="form-group">
                 <label for="imgsz">Размер изображения:</label>

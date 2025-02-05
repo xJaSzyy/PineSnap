@@ -45,6 +45,7 @@
                 <!-- <label for="modelSelect">Выберите модель:</label>
                 <select id="modelSelect" name="selected_model" required>
                     {% for model in models %}
+                        {% set model_name = model.model.split('\\')[-1] %}
                         <option value="{{ model.id }}">{{ model.model_name }}</option>
                     {% endfor %}
                 </select> -->
@@ -58,10 +59,10 @@
 
         <div class="container_gallery">
             <div class="gallery">
-                {% for tree in trees %}
+                {% for photo in photos %}
                     <div>
-                        <h3>{{ tree.photo_date.strftime('%d %B %Y') }}</h3>
-                        <img src="{{ url_for('static', filename=tree.processed_photo) }}" alt="Processed Image" class="thumbnail" onclick="zoomImage(this.src, '{{ tree.id }}')">
+                        <h3>{{ photo.photo_date.strftime('%d %B %Y') }}</h3>
+                        <img src="{{ url_for('static', filename=photo.processed_photo) }}" alt="Processed Image" class="thumbnail" onclick="zoomImage(this.src, '{{ photo.id }}')">
                     </div>
                 {% endfor %}
             </div>
