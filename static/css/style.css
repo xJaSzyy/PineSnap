@@ -55,10 +55,11 @@ main{
 }
 
 button.btnDownload{
-  width: 241px;
-  height: 56px;
-  background-color: #4db32e;
+width: 533px;
+  height: 166px;
+  background-color: rgba(255, 255, 255, 0);
   color: #FDFEFE;
+
   border-radius: 18px;
   border: none;
   text-decoration: none;
@@ -72,10 +73,21 @@ button.btnDownload{
   float: right;
   justify-content: center;
   align-items: center;
+  z-index: 2;
+}
+
+img.backDown{
+  position: absolute;
+  margin-top: 190px;
+  z-index: 1;
+  width: 533px;
+  height: 166px;
+  border-radius: 18px;
+  border: none;
 }
 
 .btnDownload:hover {
-  background-color: #79d15e;
+  background-color: #5a6e57;
 }
 
 .btnDownload img {
@@ -89,28 +101,34 @@ a{
   color: #FDFEFE;
 }
 
+img.imgDown{
+  height: 44px;
+  width: 44px;
+}
+
 button.model{
-  width: 241px;
-  height: 56px;
-  background-color: #4db32e;
+  width: 138px;
+  height: 166px;
+  background-color: #4f694b;
   color: #FDFEFE;
   border-radius: 18px;
   border: none;
   text-decoration: none;
-  font-size: 23px;
+  font-size: 20px;
+  
   /* padding-left: 56px;
   padding-right: 56px; */
-  text-align: right;
+  /* text-align: right;
   display: flex;
   align-items: center;
   margin-top: 24px;
   float: right;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
 
 .model:hover {
-  background-color: #79d15e;
+  background-color: #5a6e57;
 }
 
 /* Экран загрузки */
