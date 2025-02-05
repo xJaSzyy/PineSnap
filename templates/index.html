@@ -18,12 +18,13 @@
 
     <main>
 
-        <button class="model"><a href="{{ url_for('model') }}">модель</a></button>
+        <button class="model"><a href="{{ url_for('model') }}"> <img src="{{ url_for('static', filename='img/model.svg') }}" alt=""> Модель</a></button>
 
         <!-- <button>перейти к стеллажам</button> -->
 
+        <img class="backDown" src="{{ url_for('static', filename='img/backDown.png') }}" alt="">
         <button onclick="openLoadingScreen()" class="btnDownload">
-            <img src="{{ url_for('static', filename='img/скачать.svg') }}" alt=""> Загрузить
+            Загрузить материал <img class="imgDown" src="{{ url_for('static', filename='img/download.svg') }}" alt="">
         </button>
 
         
