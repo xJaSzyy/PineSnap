@@ -18,14 +18,17 @@
 
     <main>
 
-        <button class="model"><a href="{{ url_for('model') }}"> <img src="{{ url_for('static', filename='img/model.svg') }}" alt=""> Модель</a></button>
+        <nav>
+            <button class="model"><a href="{{ url_for('model') }}"> <img class="imgModel" src="{{ url_for('static', filename='img/model.svg') }}" alt=""></a></button>
 
-        <!-- <button>перейти к стеллажам</button> -->
-
-        <img class="backDown" src="{{ url_for('static', filename='img/backDown.png') }}" alt="">
-        <button onclick="openLoadingScreen()" class="btnDownload">
-            Загрузить материал <img class="imgDown" src="{{ url_for('static', filename='img/download.svg') }}" alt="">
-        </button>
+            <button class="linkStelaz">
+                Перейти к стеллажам <img class="imgStelaz" src="{{ url_for('static', filename='img/export.svg') }}" alt="">
+            </button>
+            
+            <button onclick="openLoadingScreen()" class="btnDownload">
+                Загрузить материал <img class="imgDown" src="{{ url_for('static', filename='img/download.svg') }}" alt="">
+            </button>
+        </nav>
 
         
 
