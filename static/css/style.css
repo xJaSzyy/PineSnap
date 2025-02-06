@@ -51,85 +51,91 @@ main{
   padding-bottom: 90px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+}
+
+nav{
+  display: flex;
+  margin-top: 20px;
 }
 
 button.btnDownload{
-width: 533px;
-  height: 166px;
-  background-color: rgba(255, 255, 255, 0);
+  width: 100%;
+  height: 84px;
   color: #FDFEFE;
-
+  background-color: #4f694b;
   border-radius: 18px;
   border: none;
   text-decoration: none;
-  font-size: 23px;
-  /* padding-left: 56px;
-  padding-right: 56px; */
-  text-align: right;
+  font-size: 20px;
   display: flex;
-  align-items: center;
-  margin-top: 24px;
-  float: right;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-}
-
-img.backDown{
-  position: absolute;
-  margin-top: 190px;
-  z-index: 1;
-  width: 533px;
-  height: 166px;
-  border-radius: 18px;
-  border: none;
+  align-items: center; 
+  cursor: pointer;
+  padding-left: 30px;
+  padding-right: 30px;
+  justify-content: space-between;
+  
 }
 
 .btnDownload:hover {
   background-color: #5a6e57;
 }
 
-.btnDownload img {
-  width: 24px;
-  height: 24px;
-  margin-right: 10px;
+img.imgStelaz{
+  width: 33px;
+  height: 33px;
 }
 
-a{
-  text-decoration: none;
+button.linkStelaz{
+  width: 100%;
+  height: 84px;
   color: #FDFEFE;
-}
-
-img.imgDown{
-  height: 44px;
-  width: 44px;
-}
-
-button.model{
-  width: 138px;
-  height: 166px;
   background-color: #4f694b;
-  color: #FDFEFE;
   border-radius: 18px;
   border: none;
   text-decoration: none;
   font-size: 20px;
-  
-  /* padding-left: 56px;
-  padding-right: 56px; */
-  /* text-align: right;
   display: flex;
   align-items: center;
-  margin-top: 24px;
-  float: right;
-  justify-content: center;
-  align-items: center; */
+  cursor: pointer;
+  padding-left: 30px;
+  padding-right: 30px;
+  justify-content: space-between;
+  margin-right: 18px;
+  margin-left: 18px;
 }
 
-.model:hover {
+.linkStelaz:hover {
   background-color: #5a6e57;
 }
+
+a{
+  color: #FDFEFE;
+}
+
+img.imgModel{
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 13px;
+  padding-bottom: 14px;
+  background-color: #4f694b;
+  border-radius: 18px;
+}
+
+button.model{
+  border: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+img.imgDown{
+  height: 33px;
+  width: 33px;
+}
+
+img.imgModel:hover {
+  background-color: #5a6e57;
+}
+
 
 /* Экран загрузки */
 .LoadingScreen {
