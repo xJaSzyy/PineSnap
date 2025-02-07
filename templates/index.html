@@ -61,12 +61,13 @@
             </form>
         </div>
 
-        <div class="container_gallery">
+      <div class="container_gallery">
+            <h2>Галерея фотографий</h2>
             <div class="gallery">
                 {% for photo in photos %}
                     <div>
-                        <h3>{{ photo.photo_date.strftime('%d %B %Y') }}</h3>
                         <img src="{{ url_for('static', filename=photo.processed_photo) }}" alt="Processed Image" class="thumbnail" onclick="zoomImage(this.src, '{{ photo.id }}')">
+                        <h3 class="name">{{ photo.photo_date.strftime('%d %B %Y') }}</h3>
                     </div>
                 {% endfor %}
             </div>
