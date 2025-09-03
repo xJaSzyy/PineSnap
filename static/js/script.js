@@ -1,18 +1,16 @@
 
 function openLoadingScreen() {
- var LoadingScreen = document.querySelector('.LoadingScreen');
- document.querySelector('.overlay').classList.add('show');
- document.querySelector('.LoadingScreen').classList.add('show');
- LoadingScreen.style.display = 'block';
+    let loadingScreen = document.querySelector('.loading-screen');
+    document.querySelector('.overlay').classList.add('show');
+    document.querySelector('.loading-screen').classList.add('show');
+    loadingScreen.style.display = 'block';
 }
 
 function closeLoadingScreen() {
-    var LoadingScreen = document.querySelector('.LoadingScreen');
+    let loadingScreen = document.querySelector('.loading-screen');
     document.querySelector('.overlay').classList.remove('show');
-    document.querySelector('.LoadingScreen').classList.remove('show');
-    LoadingScreen.style.display = 'none';
-
-   
+    document.querySelector('.loading-screen').classList.remove('show');
+    loadingScreen.style.display = 'none';
 }
 
 document.getElementById('showUploadForm').addEventListener('click', function() {
@@ -23,8 +21,7 @@ document.getElementById('showUploadForm').addEventListener('click', function() {
 function updateFileLabel(files) {
     const fileLabel = document.getElementById('file-label');
     if (files.length > 0) {
-        const fileNames = Array.from(files).map(file => file.name).join('<br>');
-        fileLabel.innerHTML = fileNames;
+        fileLabel.innerHTML = Array.from(files).map(file => file.name).join('<br>');
     } else {
         fileLabel.textContent = 'Нет загружаемых файлов';
     }
@@ -40,30 +37,10 @@ function validateForm() {
 }
 
 function zoomImage(src, shelfId) {
-       const zoomedImage = document.getElementById('zoomedImage');
-       const zoomedImg = document.getElementById('zoomedImg');
-       const shelfInfo = document.getElementById('shelfInfo');
-       const deleteButton = document.getElementById('deleteButton');
-       zoomedImg.src = src;
-       shelfInfo.innerText = `Номер полки: ${shelfId}`;
-       deleteButton.setAttribute('onclick', `deleteImage(event, '${shelfId}')`);
-       zoomedImage.style.display = 'flex';
-}
-
-function closeZoom() {
-       const zoomedImage = document.getElementById('zoomedImage');
-       zoomedImage.style.display = 'none';
-    const fileLabel = document.getElementById('file-label');
-    const fileNames = Array.from(files).map(file => file.name).join(', ');
-    fileLabel.textContent = fileNames;
-}
-
-function zoomImage(src, shelfId) {
     const zoomedImage = document.getElementById('zoomedImage');
     const zoomedImg = document.getElementById('zoomedImg');
     const shelfInfo = document.getElementById('shelfInfo');
     const deleteButton = document.getElementById('deleteButton');
-
     zoomedImg.src = src;
     shelfInfo.innerText = `Номер полки: ${shelfId}`;
     deleteButton.setAttribute('onclick', `deleteImage(event, '${shelfId}')`);
@@ -75,27 +52,23 @@ function closeZoom() {
     zoomedImage.style.display = 'none';
 }
 
-
-
-
-
 function updateImage() {
-    var select = document.getElementById("fruits");
-    var selectedFileName = select.options[select.selectedIndex].text;
-    var selectedFilePath = select.value;
+    let select = document.getElementById("fruits");
+    let selectedFileName = select.options[select.selectedIndex].text;
+    let selectedFilePath = select.value;
     document.getElementById("selectedFileName").innerText = selectedFileName;
-    var img = document.getElementById("fileImage");
+    let img = document.getElementById("fileImage");
     img.src = '/static/' + selectedFilePath;
 }
 
 function filterFiles() {
     const showAnnotated = document.getElementById('showAnnotated').checked;
     const select = document.getElementById('fruits');
-    
+
     for (let i = 0; i < select.options.length; i++) {
         const option = select.options[i];
         const txtValue = option.getAttribute('data-txt');
-        
+
         if (showAnnotated) {
             if (txtValue !== 'None') {
                 option.style.display = '';
@@ -170,53 +143,50 @@ function handleFlashMessages(messages) {
     });
 }
 
-
 function openCreateDataSet() {
-    var LoadingScreen = document.querySelector('.CreateDataSet');
+    let loadingScreen = document.querySelector('.CreateDataSet');
     document.querySelector('.overlayForCD').classList.add('showForCD');
     document.querySelector('.CreateDataSet').classList.add('showForCD');
-    LoadingScreen.style.display = 'block';
+    loadingScreen.style.display = 'block';
 }
    
 function closeCreateDataSet() {
-    var LoadingScreen = document.querySelector('.CreateDataSet');
+    let loadingScreen = document.querySelector('.CreateDataSet');
     document.querySelector('.overlayForCD').classList.remove('showForCD');
     document.querySelector('.CreateDataSet').classList.remove('showForCD');
-    LoadingScreen.style.display = 'none';
+    loadingScreen.style.display = 'none';
 }
 
 function openScript() {
-    var LoadingScreen = document.querySelector('.Script');
+    let loadingScreen = document.querySelector('.Script');
     document.querySelector('.overlayForScript').classList.add('showForScript');
     document.querySelector('.Script').classList.add('showForScript');
-    LoadingScreen.style.display = 'block';
+    loadingScreen.style.display = 'block';
 }
    
 function closeScript() {
-    var LoadingScreen = document.querySelector('.Script');
+    let loadingScreen = document.querySelector('.Script');
     document.querySelector('.overlayForScript').classList.remove('showForScript');
     document.querySelector('.Script').classList.remove('showForScript');
-    LoadingScreen.style.display = 'none';
+    loadingScreen.style.display = 'none';
 }
 
-
 const trainInput = document.getElementById('trainSize');
-    const valInput = document.getElementById('valSize');
+const valInput = document.getElementById('valSize');
 
-    trainInput.addEventListener('input', function() {
-        const trainValue = parseFloat(trainInput.value);
-        if (!isNaN(trainValue)) {
-            valInput.value = (1 - trainValue).toFixed(2);
-        }
-    });
-
-    valInput.addEventListener('input', function() {
-        const valValue = parseFloat(valInput.value);
-        if (!isNaN(valValue)) {
-            trainInput.value = (1 - valValue).toFixed(2);
-        }
-    });
-
+trainInput.addEventListener('input', function() {
+    const trainValue = parseFloat(trainInput.value);
+    if (!isNaN(trainValue)) {
+        valInput.value = (1 - trainValue).toFixed(2);
+    }
+});
+    
+valInput.addEventListener('input', function() {
+    const valValue = parseFloat(valInput.value);
+    if (!isNaN(valValue)) {
+        trainInput.value = (1 - valValue).toFixed(2);
+    }
+});
 
 $(document).ready(function() {
     $('#photoForm').on('submit', function(event) {
@@ -264,9 +234,3 @@ function updateFileCount() {
 
     console.log(`Количество выбранных файлов: ${count}`);
 }
-
-// async function selectFolder() {
-//     const folderHandle = await window.showDirectoryPicker();
-//     const path = folderHandle.name;
-//     document.getElementById('destinationFolder').value = path;
-// }
