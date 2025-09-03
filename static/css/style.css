@@ -5,47 +5,39 @@ body{
   
 }
 
-/* Хедер */
-
-header{
+header {
   background: #FDFEFE;
   width: 100%;
   padding-top: 20px;
   padding-bottom: 20px;
-  
 }
 
-img.Logo{
+img.logo {
     width: 167px;
     height: 43px;
     margin-left: 50px;
-    
 }
 
-.notification{
+.notification {
   padding-right: 16px;
 }
 
-img.profile{
+img.profile {
   width: 40px;
   height: 40px;
   border-radius: 100%;
-  
 }
 
-menu{
+menu {
   float: right;
-  margin: 0;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 50px;
+  margin: 0 50px 0 0;
 }
 
-/* Основная часть */
-
-main{
+main {
   margin-left: 50px;
   margin-right: 50px;
   padding-bottom: 90px;
@@ -53,12 +45,12 @@ main{
   flex-direction: column;
 }
 
-nav{
+nav {
   display: flex;
   margin-top: 20px;
 }
 
-button.btnDownload{
+button.download-button {
   width: 100%;
   height: 84px;
   color: #FDFEFE;
@@ -76,16 +68,16 @@ button.btnDownload{
   
 }
 
-.btnDownload:hover {
+.download-button:hover {
   background-color: #5a6e57;
 }
 
-img.imgStelaz{
+img.shelves-img {
   width: 33px;
   height: 33px;
 }
 
-button.linkStelaz{
+button.navigate-shelves {
   width: 100%;
   height: 84px;
   color: #FDFEFE;
@@ -104,72 +96,48 @@ button.linkStelaz{
   margin-left: 18px;
 }
 
-.linkStelaz:hover {
+.navigate-shelves:hover {
   background-color: #5a6e57;
 }
 
-a{
+a {
   color: #FDFEFE;
 }
 
-img.imgModel{
-  padding-left: 40px;
-  padding-right: 40px;
-  padding-top: 13px;
-  padding-bottom: 14px;
+img.model-img {
+  padding: 13px 40px 14px;
   background-color: #4f694b;
   border-radius: 18px;
 }
 
-button.model{
+button.model {
   border: none;
-  padding: 0px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
 }
 
-img.imgDown{
+img.download-img {
   height: 33px;
   width: 33px;
 }
 
-img.imgModel:hover {
+img.model-img:hover {
   background-color: #5a6e57;
 }
 
-
-
-/* Экран загрузки */
 .loading-screen {
   position: fixed;
   background-color: #FDFEFE;
   border: none;
   display: none;
   width: 781px;
-  /* height: 433px; */
-            
-
-  
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 1;
   z-index: 9999;
-  
-  
   padding: 40px;
   border-radius: 18px;
-  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); */
-  
-
-
-    
-    /* width:100%;
-    min-height:100%;
-    background-color: rgba(0,0,0,0.5);
-    overflow:hidden;
-    position:fixed;
-    top:0px; */
-    
 }
 
 .overlay {
@@ -178,49 +146,46 @@ img.imgModel:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Затемнение с прозрачностью 70% */
-  display: none; /* Скрываем по умолчанию */
-  z-index: 999; /* Устанавливаем на передний план */
+  background-color: rgba(0, 0, 0, 0.5); 
+  display: none; 
+  z-index: 999; 
 }
 
 .show {
-  display: block; /* Показываем попап и затемнение */
+  display: block; 
 }
 
-
-.VerhLoadingScreen{
+.loading-screen-header {
   display: flex;
   justify-content: space-between;
- 
 }
 
-h3{
+h3 {
   padding: 0;
   margin: 0;
   font-size: 24px;
 }
 
-.close-x{
+.loading-screen-close-button {
   border: none;
   text-decoration: none;
   background-color: #FDFEFE;
   cursor: pointer;
 }
 
-
-.file{
+.file {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 300px;
 }
 
-#uploadForm{
+#upload-form {
   display: flex;
   justify-content: center;
 }
 
-.listFiles{
+.file-list {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -232,9 +197,6 @@ h3{
   overflow-y: auto;
   max-height: 500px; 
 }
-
-
-
 
 /* Делаем наше поле ввода файла невидимым */
 .custom-file-input {
@@ -262,53 +224,43 @@ h3{
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 24px;  
-
+  margin-right: 24px;
 }
 
-.file-btn:hover{
+.file-btn:hover {
   background-color: #5a6e57;
 }
 
-
-button.downloadBtn2{
+button.load-files-button {
   background-color: #4f694b;
   color: #FDFEFE;
   border-radius: 18px;
   cursor: pointer;
   display: inline-block;
-
   width: 230px;
   height: 56px;
-  
   border: none;
   text-decoration: none;
   font-size: 23px;
-  /* display: flex; */
   align-items: center;
   justify-content: center;
- 
 }
 
-.downloadBtn2:hover{
+.load-files-button:hover {
   background-color: #5a6e57;
 }
 
-/* Галерея */
-
-.container_gallery{
+.photo-gallery {
   width: 100%;
   display: block;
   margin-top: 24px;
 }
-
 
 .gallery {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
 }
-
 
 .gallery div {
   background: white;
@@ -331,9 +283,7 @@ h3.name{
   font-size: 20px;
 }
 
-/* Увеличенное фото */
-
-.zoomed {
+.zoom-image {
   position: fixed;
   top: 0;
   left: 0;
@@ -346,32 +296,23 @@ h3.name{
   flex-direction: column;
 }
 
-.zoomed img {
+.zoom-image img {
   max-width: 90%;
   max-height: 90%;
 }
  
-#shelfInfo {
+#shelf-info {
   color: white;
   margin: 10px 0;
 }
   
-#deleteButton {
+#delete-button {
   padding: 10px 20px; 
   background-color: red; 
   color: white; 
   border: none;
   cursor: pointer;
 }
-
-
-
-
-
-
-
-
-/* Футер */
 
 footer{
     background: #FDFEFE;
@@ -381,6 +322,5 @@ footer{
     position: absolute;
     left: 0;
     bottom: 0;
-    width: 100%;
-    height: 80;
+    height: 80px;
 }

@@ -13,8 +13,8 @@ function closeLoadingScreen() {
     loadingScreen.style.display = 'none';
 }
 
-document.getElementById('showUploadForm').addEventListener('click', function() {
-    const uploadForm = document.getElementById('uploadForm');
+document.getElementById('upload-input').addEventListener('click', function() {
+    const uploadForm = document.getElementById('upload-form');
     uploadForm.style.display = uploadForm.style.display === 'none' ? 'block' : 'none';
 })
 
@@ -28,7 +28,7 @@ function updateFileLabel(files) {
 }
 
 function validateForm() {
-    const fileInput = document.getElementById('showUploadForm');
+    const fileInput = document.getElementById('upload-input');
     if (fileInput.files.length === 0) {
         alert('Пожалуйста, добавьте файлы для загрузки.');
         return false;
@@ -37,10 +37,10 @@ function validateForm() {
 }
 
 function zoomImage(src, shelfId) {
-    const zoomedImage = document.getElementById('zoomedImage');
-    const zoomedImg = document.getElementById('zoomedImg');
-    const shelfInfo = document.getElementById('shelfInfo');
-    const deleteButton = document.getElementById('deleteButton');
+    const zoomedImage = document.getElementById('zoom-image');
+    const zoomedImg = document.getElementById('zoom-img');
+    const shelfInfo = document.getElementById('shelf-info');
+    const deleteButton = document.getElementById('delete-button');
     zoomedImg.src = src;
     shelfInfo.innerText = `Номер полки: ${shelfId}`;
     deleteButton.setAttribute('onclick', `deleteImage(event, '${shelfId}')`);
@@ -48,7 +48,7 @@ function zoomImage(src, shelfId) {
 }
 
 function closeZoom() {
-    const zoomedImage = document.getElementById('zoomedImage');
+    const zoomedImage = document.getElementById('zoom-image');
     zoomedImage.style.display = 'none';
 }
 

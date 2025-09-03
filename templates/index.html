@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <img class="Logo" src="{{ url_for('static', filename='img/Logo.svg') }}" alt="">
+        <img class="logo" src="{{ url_for('static', filename='img/logo.svg') }}" alt="">
         <menu>
             <img class="notification" src="{{ url_for('static', filename='img/notification.svg') }}" alt="">
             <img class="profile" src="{{ url_for('static', filename='img/person men.png') }}" alt="">
@@ -19,14 +19,14 @@
     <main>
 
         <nav>
-            <button class="model"><a href="{{ url_for('model') }}"> <img class="imgModel" src="{{ url_for('static', filename='img/model.svg') }}" alt=""></a></button>
+            <button class="model"><a href="{{ url_for('model') }}"> <img class="model-img" src="{{ url_for('static', filename='img/model.svg') }}" alt=""></a></button>
 
-            <button class="linkStelaz">
-                Перейти к стеллажам <img class="imgStelaz" src="{{ url_for('static', filename='img/export.svg') }}" alt="">
+            <button class="navigate-shelves">
+                Перейти к стеллажам <img class="shelves-img" src="{{ url_for('static', filename='img/export.svg') }}" alt="">
             </button>
             
-            <button onclick="openLoadingScreen()" class="btnDownload">
-                Загрузить материал <img class="imgDown" src="{{ url_for('static', filename='img/download.svg') }}" alt="">
+            <button onclick="openLoadingScreen()" class="download-button">
+                Загрузить материал <img class="download-img" src="{{ url_for('static', filename='img/download.svg') }}" alt="">
             </button>
         </nav>
 
@@ -34,18 +34,18 @@
 
         <div class="overlay" onclick="closeLoadingScreen()"></div>
         <div class="loading-screen">
-            <div class="VerhLoadingScreen">
+            <div class="loading-screen-header">
                 <h3>Загрузка файлов</h3>
-                <button class="close-x" onclick="closeLoadingScreen()">
-                   <img src="{{ url_for('static', filename='img/close-x.svg') }}" alt="">
+                <button class="loading-screen-close-button" onclick="closeLoadingScreen()">
+                   <img src="{{ url_for('static', filename='img/close.svg') }}" alt="">
                 </button>
             </div>
           
-            <div class="listFiles">
+            <div class="file-list">
                 <span class="file" id="file-label"></span>
             </div>
             
-            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                 <!-- <label for="modelSelect">Выберите модель:</label>
                 <select id="modelSelect" name="selected_model" required>
                     {% for model in models %}
@@ -54,14 +54,14 @@
                     {% endfor %}
                 </select> -->
 
-                <label class="file-btn" for="showUploadForm">Выбрать файлы</label>
+                <label class="file-btn" for="upload-input">Выбрать файлы</label>
                 
-                <button class="downloadBtn2" type="submit">Загрузить</button>
-                <input id="showUploadForm" name="files" multiple class="custom-file-input" type="file" accept=".mp4, .mov, .avi, .jpg, .jpeg, .png" onchange="updateFileLabel(this.files)">
+                <button class="load-files-button" type="submit">Загрузить</button>
+                <input id="upload-input" name="files" multiple class="custom-file-input" type="file" accept=".mp4, .mov, .avi, .jpg, .jpeg, .png" onchange="updateFileLabel(this.files)">
             </form>
         </div>
 
-      <div class="container_gallery">
+      <div class="photo-gallery">
             <h2>Галерея фотографий</h2>
             <div class="gallery">
                 {% for photo in photos %}
@@ -73,10 +73,10 @@
             </div>
         </div>
 
-        <div class="zoomed" id="zoomedImage" onclick="closeZoom()" style="display: none;">
-            <img id="zoomedImg" src="" alt="Zoomed Image">
-            <div id="shelfInfo"></div>
-            <button id="deleteButton" onclick="deleteImage(event, '')">Удалить</button>
+        <div class="zoom-image" id="zoom-image" onclick="closeZoom()" style="display: none;">
+            <img id="zoom-img" src="" alt="Zoomed Image">
+            <div id="shelf-info"></div>
+            <button id="delete-button" onclick="deleteImage(event, '')">Удалить</button>
         </div>
     </main>
 
